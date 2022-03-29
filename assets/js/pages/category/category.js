@@ -1,8 +1,13 @@
 import {
     URL_SERVER_LOCAL,
     PAGE_NUMBER_DEFAULT,
-    PAGE_SIZE_DEFAULT
+    PAGE_SIZE_DEFAULT,
+    URL_CLIENT_LOCAL,
+    query
 } from '../../const.js';
+import {checkLogin} from '../../checkLogged.js';
+import logOut from '../../logout.js';
+
 
 console.log("Category js");
 //Global
@@ -10,6 +15,8 @@ var url = new URL(window.location.href)
 var paramId = url.searchParams.get("id");
 var productApi = URL_SERVER_LOCAL + "/api/Products/GetProductByCategory?categoryId="+paramId;
 var categoryApi = URL_SERVER_LOCAL + "/api/Categories/categoryId=" + paramId;
+var userApi = URL_SERVER_LOCAL + "/api/Users";
+const detailRoute = URL_CLIENT_LOCAL + "/pages/product/detail_client.html"
 //Variables
 var pageNumber = 1;
 var pageSize = 5;
@@ -38,10 +45,27 @@ var elCurrentPages = document.querySelector(".home-filter__page-cur");
 var btnPagePrev = document.querySelector(".home-filter__page-control-prev");
 var btnPageNext = document.querySelector(".home-filter__page-control-next");
 var elInputPrice = document.querySelector(".select-input__label");
-var footer
+var btnLogout = document.querySelector('.header__navbar-logout');
+var btnRegister = query(".header__navbar-register");
+var navUser = query('.header__navbar-user');
+var btnLogin = query(".header__navbar-item-login");
 console.log(paramId);
 
-function start(){
+async function start(){
+
+    //Check user login  
+    var infoLog =  await checkLogin();
+
+    if(infoLog.isLogged) {
+        navUser.classList.remove('hide');
+        handleGetInfoUser(infoLog);
+        console.log("Login")
+    }else{
+        
+        console.log("not yet");
+    }
+
+
     handleGetDefaultPage()
     .then(response => {
         totalPages = response.totalPages;
@@ -193,11 +217,11 @@ function renderProduct(products){
         }else{
             imgURL = '';
         }
-
+        console.log(detailRoute);
         return `
         <div class="grid__column-2-4">
         <!-- Product item -->
-        <a class="home-product-item" href="">
+        <a class="home-product-item" href='${detailRoute}?id=${product.id}'>
             <div class="home-product-item__img" 
             style="background-image: url('${
                 URL_SERVER_LOCAL +'/'+ imgURL
@@ -396,3 +420,27 @@ btnPageNext.addEventListener('click', function(e) {
         }
     }
 })
+
+//render User
+function handleGetInfoUser(infoLog){
+
+    var navUserName = query('.header__navbar-user-name');
+    fetch(userApi +'/GetInfo', {
+        headers: {
+            'Authorization' : `Bearer ${infoLog.accessToken}`
+        },
+    })
+    .then(response => response.json())
+    .then((data)=>{
+        navUserName.textContent = data.userName;
+        navUserName.style.textTransform = 'upperCase';
+    })
+
+    btnLogin.style.display = "none";
+    btnRegister.style.display = "none";
+
+}
+
+//Handle click logOut
+
+btnLogout.addEventListener('click', logOut);

@@ -35,17 +35,13 @@ function handleGetInfoProduct(){
             }
             return response.json();
         }).then((response)=>{
-            console.log(response);
             title.innerText = response.title;
             code.innerText = response.code;
             price.innerText = response.price;
             quantity.innerText = response.quantity;
             description.innerText = response.description;
 
-            console.log(imageDetail);
-
             var link =  `url('${URL_SERVER_LOCAL + response.imagePath}')`;
-            console.log(link);
             imageDetail.style.backgroundImage = link
         })
 }

@@ -240,6 +240,7 @@
     animation: headerNotifyGrowth ease-in 0.2s;
     will-change: animation, transform;
     display: none;
+    z-index: 1;
 }
 
 .header__notify::before {

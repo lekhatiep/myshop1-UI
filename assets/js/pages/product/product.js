@@ -1,23 +1,40 @@
-//  import { totalPages, pageNumber, Pagination } from '../../pagination.js';
+import { 
+    URL_CLIENT_LOCAL,
+    URL_SERVER_LOCAL,
+    query,
+    Routes,
+    Permissions
+} from "../../const.js";
+import {checkLogin} from '../../checkLogged.js'
+import checkPermission from '../../checkPermission.js';
 
-var serverURL = "https://localhost:5001";
-var listProductBlock = document.querySelector("#list-products")
-var productApi = "https://localhost:5001/api/Products";
-
-var ulTag = document.querySelector(".pagination");
+//Const
+const serverURL = URL_SERVER_LOCAL;
+const productApi = URL_SERVER_LOCAL+"/api/Products";
+const userApi = URL_SERVER_LOCAL+"/api/Users";
+//Variables
 var pageNumber = 1;
 var pageSize = 10;
 var totalPages = 0;
 var page = 1;
 var infoPage ={};
+
+var listProductBlock = document.querySelector("#list-products")
+var ulTag = document.querySelector(".pagination");
+var routePage = location.pathname;
 //Start 
-function start(){
-    // getProducts(function(response){
-    //     console.log(response);
-        
-    //     renderProduct(response.data);
-        
-    // })
+async function start(){
+    //Check authen
+    var infoLog = await checkLogin();
+    if(infoLog.isLogged){
+        //Check permission
+        var createProductRoute = Routes.Products.get;
+        var getProductPermission = Permissions.Product.Get
+
+        await checkPermission(routePage,createProductRoute,getProductPermission);
+    }else{
+        console.log("Not logged");
+    }
 
     handleGetDefaultPage().then(response =>{     
             totalPages = response.totalPages;
@@ -249,3 +266,36 @@ function renderNavigationPaging(totalPages,page){
     }
     ulTag.innerHTML = liTag;
 } 
+
+async function handleCheckPermissionPage(accessToken){
+
+    console.log("check permission this page");
+
+    var createProductRoute = Routes.Products.get;
+    var getProductPermission = Permissions.Product.Delete
+
+    console.log(createProductRoute);
+    console.log(routePage);
+
+
+    if(createProductRoute === routePage){
+        var userPermissions = await fetch(userApi+"/GetUserPermission/2", {
+            headers: {
+                "Authorization": "Bearer " + accessToken
+            }
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            console.log(response);
+            return response;
+        })
+        console.log(userPermissions);
+        var isAuthorize = userPermissions.some(function(permission) {
+            return permission === getProductPermission;
+        });
+
+        console.log(isAuthorize);
+    }
+}

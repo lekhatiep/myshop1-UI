@@ -1,5 +1,5 @@
 console.log("create.js");
-
+import {checkLogin, autoRedirect} from '../../checkLogged.js'
 var form = document.querySelector("#admin-product__form-create");
 var redirectFrom = location.pathname;
 var productApi = "https://localhost:5001/api/Products";
@@ -9,8 +9,11 @@ form.onsubmit = function(e){
 
 }
 
-function start(){
-    autoRedirect();
+async function start(){
+    var infoLog = await checkLogin();
+    if(!infoLog.isLogged){
+        autoRedirect(redirectFrom);
+    }
     handleCreateForm();
 
 }
@@ -77,23 +80,4 @@ function createProduct(formData,callback){
         .catch((error) => {
             console.log(error);
         })
-}
-
-//Check Logged in
-async function isLoggedIn () {
-    const token = localStorage.getItem('access_token')
-    if (token === null) return false
-    else return true;
-}
-    
-
-async function autoRedirect () {
-    console.log(location.pathname);
-    const validLogin = await isLoggedIn()
-
-    console.log(validLogin);
-    if (!validLogin && location.pathname !== '/pages/login/login.html')
-        location.href='/pages/login/login.html?redirectFrom='+redirectFrom;
-    if (validLogin && location.pathname === '/pages/login/login.html/')
-        location.href= '/'
 }

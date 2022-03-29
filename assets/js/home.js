@@ -4,7 +4,7 @@ import {
     PAGE_SIZE_DEFAULT,
     query
 } from './const.js';
-import checkLogged from './checkLogged.js';
+import {checkLogin} from './checkLogged.js';
 import logOut from './logout.js';
 
 
@@ -46,16 +46,18 @@ var listFooterCategory = document.querySelector(".footer-list__category");
 var btnLogout = document.querySelector('.header__navbar-logout');
 var btnRegister = query(".header__navbar-register");
 var btnLogin = query(".header__navbar-item-login");
+var navUser = query('.header__navbar-user');
 //Function start
 async function start() {
     //Check user login  
-    var infoLog =  await checkLogged();
-    console.log(infoLog.isLogged);
+    var infoLog =  await checkLogin();
+
     if(infoLog.isLogged) {
-        
+        navUser.classList.remove('hide');
         handleGetInfoUser(infoLog);
         console.log("Login")
     }else{
+        
         console.log("not yet");
     }
 
@@ -475,6 +477,8 @@ window.handleClickCategory  = function (id) {
 
 //render User
 function handleGetInfoUser(infoLog){
+
+    var navUserName = query('.header__navbar-user-name');
     fetch(userApi +'/GetInfo', {
         headers: {
             'Authorization' : `Bearer ${infoLog.accessToken}`
@@ -482,12 +486,11 @@ function handleGetInfoUser(infoLog){
     })
     .then(response => response.json())
     .then((data)=>{
+        console.log(data);
         navUserName.textContent = data.userName;
         navUserName.style.textTransform = 'upperCase';
     })
 
-  
-    var navUserName = query('.header__navbar-user-name');
     btnLogin.style.display = "none";
     btnRegister.style.display = "none";
 
