@@ -173,8 +173,10 @@
                 <!-- Cart layout -->
                 <div class="header__cart">
                     <div class="header__cart-wrap">
-                        <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
-                        <span class="header__cart-notice">3</span>
+                        <a href="../cart/" class="header__cart-link">
+                            <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
+                            <span class="header__cart-notice">3</span>
+                        </a>
                         <!-- No car: header__cart-list-no-cart -->
                         <div class="header__cart-list">
                             <img src="../../assets/img/no-cart.png" alt="" class="header__cart-no-car-img">
@@ -424,17 +426,36 @@
                                 </div>
                                 <div class="product__detail-social">
                                     <div class="product__detail-social-item">
-                                        <span>Chia se</span>
+                                        <span>Chia sẻ:</span>
                                         <ul class="product__detail-social-list">
-                                            <li class="product__detail-social-list-item"><i class="fa-brands fa-facebook-messenger"></i></li>
-                                            <li class="product__detail-social-list-item"><i class="fa-brands fa-facebook"></i></li>
-                                            <li class="product__detail-social-list-item"><i class="fa-brands fa-pinterest"></i></li>
-                                            <li class="product__detail-social-list-item"><i class="fa-brands fa-twitter"></i></li>
+                                            <li class="product__detail-social-list-item">
+                                                <a href="" class="product__detail-social-item-link">
+                                                    <i class="product__detail-social-mes fa-brands fa-facebook-messenger"></i>
+                                                </a>
+                                            </li>
+                                            <li class="product__detail-social-list-item">
+                                                <a href=""  class="product__detail-social-item-link">                                              
+                                                    <i class="product__detail-social-fb fa-brands fa-facebook"></i>
+                                                </a>
+                                            </li>
+                                            <li class="product__detail-social-list-item">
+                                                <a href=""  class="product__detail-social-item-link">
+                                                    <i class="product__detail-social-pin fa-brands fa-pinterest"></i>
+                                                </a>
+                                            </li>
+                                            <li class="product__detail-social-list-item">
+                                                <a href="" class="product__detail-social-item-link">
+                                                    <i class="product__detail-social-twi fa-brands fa-twitter"></i>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                     <div class="product__detail-social-liked">
-                                        <i class="fa-solid fa-heart"></i>
-                                        Da thich (1.2k)
+                                        <!-- <i class="fa-solid fa-heart"></i> -->
+                                        <a href="" class="product__detail-social-like-link">
+                                            <i class="product__detail-social-heart fa-regular fa-heart"></i>
+                                        </a>
+                                        <span>Đã thích (1.2k)</span>
                                     </div>
                                 </div>
                             </div>
@@ -499,7 +520,9 @@
                                         <div class="product__quantity-warp-minus">
                                             <i class="product__detail-quantity-minus fa-solid fa-minus"></i>
                                         </div>
-                                        <div class="product__quantity-warp-current">0</div>
+                                        <div class="product__quantity-warp-current">
+                                            <input type="text" class="product__quantity-current" aria-valuenow="1" value="1">
+                                        </div>
                                         <div class="product__quantity-warp-plus">
                                             <i class="product__detail-quantity-plus fa-solid fa-plus"></i>
                                         </div>
@@ -512,6 +535,7 @@
                                         Thêm vào giỏ hàng
                                     </div>
                                 </div>
+                                <div style="margin-top: 30px; border-top: 1px solid rgba(0, 0, 0, 0.05);"></div>
                             </div>
                         </div>
             </div>

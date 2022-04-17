@@ -1,0 +1,24 @@
+.header-with-search-cart {
+    background-color: #fff
+}
+
+.header__cart-page {
+    flex: 1;
+}
+
+.header__cart-logo{
+    width: 120px;
+}
+.header__cart-search {
+    flex: 1;
+    border: 1px solid red;
+}
+
+.header__cart-search-input {
+    
+}
+
+.header__cart-page-name {
+    color: var(--primary-color);
+    font-size: 1.6rem;
+}

@@ -517,21 +517,39 @@
 
 .header__cart-wrap{
     position: relative;
+  
+}
+
+.header__cart-link {
     cursor: pointer;
     display:inline-block;
     padding: 0 12px;
+    position: relative;
 }
 
 .header__cart-wrap:hover
 .header__cart-list{
     display: block;
-    animation: fadeIn ease-in 0.1s;
+    transform-origin: calc(100% - 32px) top;
+    animation: headerNotifyGrowth ease-in 0.2s;
+    will-change: animation, transform;
 }
 
+@keyframes dialogReduce {
+    from{
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to{
+        opacity: 0;
+        transform: scale(0);
+    }
+}
 .header__cart-list{
     position: absolute;
     top: calc(100% + 9px);
-    right: 4px;
+    right: 40px;
     background-color: var(--white-color);
     width: 380px;
     border-radius: 2px;
@@ -539,6 +557,7 @@
     cursor: default;
     display: none;
     z-index: 1;
+  
 }
 
 .header__cart-list::after{
