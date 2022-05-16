@@ -8,8 +8,6 @@ var cartApi = URL_SERVER_LOCAL + '/api/Carts';
 async function start(){
 
     await getListCart()
-    renderListCartUser();
-    UpdateData();
 }
 
 start();
@@ -25,7 +23,8 @@ start();
         })
         .then((res)=>{
             setSession('listCart',JSON.stringify(res))
-            //renderListCartUser(res)
+            renderListCartUser();
+            
         })
         .catch(er=>{
             console.log(er);
@@ -38,11 +37,6 @@ start();
 function renderListCartUser(){
 
     var data = JSON.parse(getSession('listCart'));
-  
-   
-    var cartNoticeNumber = document.querySelector('.header__cart-notice');
-    
-    console.log(data);
     
     if(data === null || data.length === 0){
         
@@ -91,7 +85,7 @@ function renderListCartUser(){
     
         divCartList.innerHTML = html;
     }
-  
+    UpdateData();
 }
 
 window.removeFromCart = async function(){
@@ -127,7 +121,7 @@ window.removeFromCart = async function(){
             
 }
 
- function UpdateData() {  
+function UpdateData() {  
     
     var listCartItemsEl = document.querySelectorAll('.content__cart-list-item');
     
@@ -141,7 +135,7 @@ window.removeFromCart = async function(){
 
             inputQuantity.value = currentValue + 1;
             
-            UpdateItem(plusItem.dataset.id, inputQuantity.value);
+            UpdateItem(plusItem.dataset.id, inputQuantity.value, plusItem);
             
         })
         //Handle btn (-)
@@ -155,17 +149,16 @@ window.removeFromCart = async function(){
             if(inputQuantity.value <= 1){
                 inputQuantity.value = 1;
             }
-           
             UpdateItem(plusItem.dataset.id, inputQuantity.value)
         }
         
     });
-   
+
 }
 
 
-  function UpdateItem(id, quantity) {
-
+function UpdateItem(id, quantity,el) {
+    
     var data = {
         id : id,
         quantity: quantity
@@ -182,7 +175,6 @@ window.removeFromCart = async function(){
     fetch(cartApi+'/UpdateItem', options)
         .then(function(response)   
             {
-                console.log(response.status); 
                 if(response.status === 200){
                     getListCart();
                 }
