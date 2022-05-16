@@ -79,11 +79,11 @@
 }
 
 .header__list-cart-total{
-    width: 13.75%;
+    width: 15.75%;
 }
 
 .header__list-cart-action{
-    width: 13.75%;
+    width: 11%;
 }
 
 .content__cart-list-wrap{
@@ -102,6 +102,7 @@
     display: flex;
     align-items: center;
     padding: 12px 0;
+    width: 100%;
 }
 
 .content__cart-item-checkbox {
@@ -196,7 +197,7 @@
 
 .content__cart-item-total {
     width: 13.75%;
-    text-align: center;
+    text-align: left;
 }
 
 .content__cart-warp-quantity {
@@ -255,7 +256,7 @@
 .content__cart-item-action {
     width: 11%;
     color: var(--primary-color);
-    text-align: center;
+    text-align: left;
 }
 
 .cart__purchase{

@@ -49,7 +49,6 @@ var btnLogout = document.querySelector('.header__navbar-logout');
 var btnRegister = query(".header__navbar-register");
 var navUser = query('.header__navbar-user');
 var btnLogin = query(".header__navbar-item-login");
-console.log(paramId);
 
 async function start(){
 
@@ -217,7 +216,7 @@ function renderProduct(products){
         }else{
             imgURL = '';
         }
-        console.log(detailRoute);
+
         return `
         <div class="grid__column-2-4">
         <!-- Product item -->
