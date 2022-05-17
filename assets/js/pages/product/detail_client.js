@@ -1,7 +1,7 @@
 console.log('sss');
 
 import {URL_SERVER_LOCAL} from '../../const.js'
-import  {setSession} from '../../storeSession.js';
+import  {setCookie} from '../../storeCookie.js';
 import  renderListCart from '../cart/listCart.js'
 
 //Variables
@@ -115,8 +115,7 @@ btnAddToCart.onclick = ()=>{
             response.json()
         )
         .then( async response =>{
-            console.log(response);
-            setSession("listCart",JSON.stringify(response));
+            setCookie("listCart",JSON.stringify(response),30);
             renderListCart();
         })
         .catch((error) => {
@@ -126,3 +125,8 @@ btnAddToCart.onclick = ()=>{
 }
 
 
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'visible') {
+        start();
+    } 
+});

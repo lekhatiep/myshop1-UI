@@ -295,3 +295,7 @@ html {
 .show{
     display: block; 
 }
+
+.text-primary-color {
+    color: var(--primary-color);
+}

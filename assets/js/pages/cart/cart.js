@@ -1,28 +1,50 @@
-import {URL_SERVER_LOCAL} from '../../const.js'
-import  {setSession, getSession} from '../../storeSession.js';
+import {URL_CLIENT_LOCAL, URL_SERVER_LOCAL} from '../../const.js'
+import  {setCookie,getCookie} from '../../storeCookie.js';
+import  {setSession,getSession} from '../../storeSession.js';
+
 
 //Get variables
-var divCartList = document.querySelector(".content__cart-list-wrap");
+
 const $ = document.querySelector.bind(document);//Query
+
+var divCartList = $(".content__cart-list-wrap");
+var quantityTotal = $(".cart__purchase-quantity-total");
+var grandTotal = $(".cart__purchase-price-total");
+var btnCheckAll = $(".cart__purchase-input");
+var textCheckAll = $(".cart__purchase-text");
+var headerCheckAll = $(".header__list-cart-checkbox");
+var btnPurchase = $(".cart__purchase-btn");
+
 var cartApi = URL_SERVER_LOCAL + '/api/Carts';
 async function start(){
 
     await getListCart()
+    var isCheckAllBottom = getSession('isCheckAllBottom');
+    var isCheckAllHeader = getSession('isCheckAllHeader');
+
+    isCheckAllBottom === 'true' ? btnCheckAll.checked = true : btnCheckAll.checked = false;
+    isCheckAllHeader === 'true' ? headerCheckAll.checked = true : headerCheckAll.checked = false;
+
+   
 }
 
 start();
 
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'visible') {
+        start();
+    } 
+});
+
 //getListCart
  async function getListCart(){
-
-    console.log('aaa');
 
      await fetch(cartApi + '/GetListCart')
         .then(response=>{
             return response.json();
         })
         .then((res)=>{
-            setSession('listCart',JSON.stringify(res))
+            setCookie('listCart',JSON.stringify(res),30)
             renderListCartUser();
             
         })
@@ -36,19 +58,26 @@ start();
 
 function renderListCartUser(){
 
-    var data = JSON.parse(getSession('listCart'));
-    
+    var data = JSON.parse(getCookie('listCart'));
+    var contentCart = $('.content__cart-warp');
+    var contentNoCart = $('.no-cart');
+
     if(data === null || data.length === 0){
-        
+        contentCart.style.display = 'none';
+        contentNoCart.style.display = 'block';
         console.log('no cart')
-       
+        
     }else{
+        contentCart.style.display = 'block';
+        contentNoCart.style.display = 'none';
+
        
+
         var html = '';
-        var index = 0;
-         data.forEach(item=>{
+
+         data.forEach((item,index)=>{
             html+= `<div class="content__cart-list-item">
-            <input type="checkbox" class="content__cart-item-checkbox">
+            <input type="checkbox" class="content__cart-item-checkbox check-item-${index}" ${(item.active === true)? 'checked' :'' }>
             <div class="content__cart-item-info">
                 <a href="">
                     <div class="content__cart-item-info-img" style="background-image: url(${URL_SERVER_LOCAL+ item.imgPath});"></div>
@@ -67,101 +96,163 @@ function renderListCartUser(){
                         <i class="content__cart-minus fa-solid fa-minus"></i>
                     </div>
                     <div class="content__cart-warp-current">
-                        <input type="text" class="product__quantity-current product__quantity-${item.id}"  value="${item.quantity}">
+                        <input type="text" class="product__quantity-current product__quantity-${index}"  value="${item.quantity}">
                     </div>
                     <div class="content__cart-warp-plus plus-item-${index}" data-id='${item.id}'">
                         <i class="content__cart-plus fa-solid fa-plus"></i>
                     </div>
                 </div>
             </div>
-            <div class="content__cart-item-total">${numberWithCommas(item.total)} đ</div>
+            <div class="content__cart-item-total item-total-${index}">${numberWithCommas(item.total)} đ</div>
             <div class="content__cart-item-action">
-                <div class="content__cart-item-remove" onclick=removeFromCart('${item.id}')>Xóa</div>
+                <div class="content__cart-item-remove remove__item-${index}" onclick=removeFromCart('${item.id}')>Xóa</div>
             </div>
         </div>
             `
-            index++;
+            
         });
     
         divCartList.innerHTML = html;
+
     }
     UpdateData();
+    calculateTotal();
+   
 }
 
-window.removeFromCart = async function(){
-
-    console.log('del')
-    var listCartTemp = JSON.parse(getSession('listCart'));
-
-    for (let i = 0; i < listCartTemp.length; i++) {
-        if (listCartTemp[i].id === id) {
-            listCartTemp.splice(i, 1);
-        }
-    }
-
-    var options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(listCartTemp)
-    }
-    
-    await fetch(cartApi+'/UpdateOrRemoveCartItem', options)
-        .then(response => 
-            response.json()
-        )
-        .then( async response =>{
-            setSession("listCart",JSON.stringify(response));
-            renderListCart();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-            
-}
-
+//Handle update data
 function UpdateData() {  
     
     var listCartItemsEl = document.querySelectorAll('.content__cart-list-item');
     
+    
+
     listCartItemsEl.forEach((element,index) => {
         var plusItem = $('.plus-item-'+index);
         var minusItem = $('.minus-item-'+index);
+        var btnRemove = $('.remove__item-'+index);
+        var checkboxItem = $('.check-item-'+index);
+        var active = false;
+        const id = plusItem.dataset.id;
+        var quantityItem = $('.product__quantity-'+index);
+        var inputQuantity = $('.product__quantity-'+ index )
+
         //Handle btn (+)
-        plusItem.addEventListener("click", function(){
-            var inputQuantity = $('.product__quantity-'+ plusItem.dataset.id )
+        plusItem.onclick =  function(){
+
             var currentValue = parseInt( inputQuantity.value);
 
             inputQuantity.value = currentValue + 1;
             
-            UpdateItem(plusItem.dataset.id, inputQuantity.value, plusItem);
+            UpdateItem(plusItem.dataset.id, inputQuantity.value, checkboxItem.checked?true:false);
             
-        })
-        //Handle btn (-)
-        minusItem.onclick =  function(){
-
-            var inputQuantity = $('.product__quantity-'+ plusItem.dataset.id )
-            var currentValue = parseInt(inputQuantity.value);
-
-            inputQuantity.value = currentValue - 1;
-
-            if(inputQuantity.value <= 1){
-                inputQuantity.value = 1;
-            }
-            UpdateItem(plusItem.dataset.id, inputQuantity.value)
         }
         
-    });
+        //Handle btn (-)
 
+        var currentValue = parseInt(inputQuantity.value);
+        if(inputQuantity.value <= 1){
+            inputQuantity.value = 1;
+        }else{
+            
+            minusItem.onclick =  function(){
+                inputQuantity.value = currentValue - 1;
+
+                if(inputQuantity.value <= 1){
+                    inputQuantity.value = 1;
+                }
+                UpdateItem(plusItem.dataset.id, inputQuantity.value,checkboxItem.checked?true:false)
+            }
+        }
+       
+         //Handle input quantity
+
+         quantityItem.onblur = ()=>{
+
+            var currentValue = parseInt(quantityItem.value);
+            if (typeof(currentValue) === 'number' && !isNaN(currentValue)) {
+                quantityItem.value = currentValue;
+            }else{
+                quantityItem.value = 1;
+            }
+
+            UpdateItem(plusItem.dataset.id, quantityItem.value,checkboxItem.checked?true:false)
+        }
+
+        quantityItem.addEventListener("keypress", function(event) {
+            // If the user presses the "Enter" key on the keyboard
+            if (event.key === "Enter") {
+              // Cancel the default action, if needed
+              event.preventDefault();
+              // Trigger the button element with a click
+              var currentValue = parseInt(quantityItem.value);
+              if (typeof(currentValue) === 'number' && !isNaN(currentValue)) {
+                  quantityItem.value = currentValue;
+              }else{
+                  quantityItem.value = 1;
+              }
+  
+              UpdateItem(plusItem.dataset.id, quantityItem.value)
+            }
+          });
+
+        //Handle btn remove
+
+        btnRemove.onclick = function(){
+            
+            console.log('del')
+            var listCartTemp = JSON.parse(getCookie('listCart'));
+            
+            for (let i = 0; i < listCartTemp.length; i++) {
+                if (listCartTemp[i].id === id) {
+                    listCartTemp.splice(i, 1);
+                }
+            }
+
+            var options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(listCartTemp)
+            }
+            
+             fetch(cartApi+'/UpdateOrRemoveCartItem', options)
+                .then(response => {
+                    if(response.status === 200){
+                        getListCart();
+                    } 
+                    response.json()
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+
+        }
+
+        //Hanlde check an item
+
+        checkboxItem.onchange = function(event){
+            if(checkboxItem.checked){
+                active = true;
+                UpdateItem(id,parseInt(quantityItem.value),active)  
+
+            }else{
+                
+                active = false;
+                UpdateItem(id,parseInt(quantityItem.value),active) 
+            }
+        }    
+
+    });
 }
 
-
-function UpdateItem(id, quantity,el) {
+function UpdateItem(id, quantity,active) {
     
     var data = {
         id : id,
-        quantity: quantity
+        quantity: quantity,
+        active: active
     }
 
     var options = {
@@ -177,6 +268,8 @@ function UpdateItem(id, quantity,el) {
             {
                 if(response.status === 200){
                     getListCart();
+                    calculateTotal();
+                   
                 }
                 return response.json();
             }           
@@ -193,4 +286,102 @@ function UpdateItem(id, quantity,el) {
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function removeCommasNumber(x){
+    return x.toString().replace(/\./g,'')
+}
+
+//Hanlde calculate total
+
+function calculateTotal(){
+    console.log('re-calculateTotal');
+    var listCartItemsEl = document.querySelectorAll('.content__cart-list-item');
+    
+
+    var currenTotalQuanityItem = 0;
+    var currentGrandTotal = 0;
+
+    var numberChecked = 0
+    listCartItemsEl.forEach((element,index) => {
+        var checkboxItem = $('.check-item-'+index);
+        if(checkboxItem.checked){
+            numberChecked++;
+            var total = $('.item-total-'+index);
+            var quantity = $('.product__quantity-'+index).value;
+            currentGrandTotal += parseInt(removeCommasNumber(total.innerHTML));   
+            currenTotalQuanityItem += parseInt(quantity);
+        }
+    })
+    
+
+    grandTotal.innerText = numberWithCommas(currentGrandTotal);
+    quantityTotal.innerText = currenTotalQuanityItem;
+
+}
+
+
+//Check all item 
+
+btnCheckAll.onchange =  function(){
+
+    var listCartItemsEl = document.querySelectorAll('.content__cart-list-item');
+
+    listCartItemsEl.forEach((element,index) => {
+        var plusItem = $('.plus-item-'+index);
+        const id = plusItem.dataset.id;
+
+        var quantityItem = $('.product__quantity-'+index);
+        var checkboxItem = $('.check-item-'+index);
+
+        if(!checkboxItem.checked && btnCheckAll.checked ){
+            checkboxItem.checked  = true;
+            setSession('isCheckAllBottom',true)
+            setSession('isCheckAllHeader',false)
+            UpdateItem(plusItem.dataset.id, quantityItem.value,checkboxItem.checked)
+        }
+        
+        if(checkboxItem.checked && !btnCheckAll.checked)
+        {
+            checkboxItem.checked  = false;
+            setSession('isCheckAllBottom',false)
+            UpdateItem(plusItem.dataset.id, quantityItem.value,checkboxItem.checked)
+        }
+    })
+}
+
+
+headerCheckAll.onchange = function(){
+    
+    var listCartItemsEl = document.querySelectorAll('.content__cart-list-item');
+
+    listCartItemsEl.forEach((element,index) => {
+        var plusItem = $('.plus-item-'+index);
+        const id = plusItem.dataset.id;
+
+        var quantityItem = $('.product__quantity-'+index);
+        var checkboxItem = $('.check-item-'+index);
+
+        if(!checkboxItem.checked && headerCheckAll.checked){
+            checkboxItem.checked  = true;
+     
+            setSession('isCheckAllHeader',true)
+            setSession('isCheckAllBottom',false)
+            UpdateItem(plusItem.dataset.id, quantityItem.value,checkboxItem.checked)
+        }
+        
+        if(checkboxItem.checked && !headerCheckAll.checked )
+        {
+            setSession('isCheckAllHeader',false)
+            checkboxItem.checked  = false;
+            
+            UpdateItem(plusItem.dataset.id, quantityItem.value,checkboxItem.checked)
+        }     
+    })
+}
+
+//Hanlde click btn purchase 
+btnPurchase.onclick = function(){
+
+    window.location.href = `${URL_CLIENT_LOCAL}/pages/order`;
 }

@@ -1,4 +1,4 @@
-import {getSession, setSession} from '../../storeSession.js';
+import {getCookie, setCookie} from '../../storeCookie.js';
 import {URL_SERVER_LOCAL, URL_CLIENT_LOCAL} from '../../const.js'
 
 var cartApi = "https://localhost:5001/api/Carts";
@@ -6,7 +6,7 @@ var viewCartBtn = document.querySelector('.header__cart-view-cart');
 
 export default function renderListCart(){
 
-    var listCartTemp = JSON.parse(getSession('listCart'));
+    var listCartTemp = JSON.parse(getCookie('listCart'));
     var cartListItem = document.querySelector('.header__cart-list-item');
     var noCartList = document.querySelector('.header__cart-no-car-img')
     var noCartListMsg = document.querySelector('.header__cart-list-no-cart-msg')
@@ -66,7 +66,7 @@ export default function renderListCart(){
 window.removeFromCart = async function(id){
 
     console.log('del')
-    var listCartTemp = JSON.parse(getSession('listCart'));
+    var listCartTemp = JSON.parse(getCookie('listCart'));
 
     for (let i = 0; i < listCartTemp.length; i++) {
         if (listCartTemp[i].id === id) {
@@ -87,7 +87,7 @@ window.removeFromCart = async function(id){
             response.json()
         )
         .then( async response =>{
-            setSession("listCart",JSON.stringify(response));
+            setCookie("listCart",JSON.stringify(response),30);
             renderListCart();
         })
         .catch((error) => {
