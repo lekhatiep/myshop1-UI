@@ -232,10 +232,12 @@
     font-size: 1.3rem;
 }
 
-.order__item-info-total {
+.order__item-info-sum-total {
     flex: 1;
-    font-size: 1.3rem;
     text-align: right;
+    padding: 30px 0;
+    /* background-color: #fafdff; */
+    font-size: 1.4rem;
 }
 
 .order__item-voucher {
@@ -384,7 +386,7 @@
 .order__item-info-total {
     text-align: right;
     padding: 30px 0;
-    background-color: #fafdff;
+    /* background-color: #fafdff; */
     font-size: 1.4rem;
     color: #929292;
 }
@@ -440,11 +442,11 @@
 
 .order__payment-wrap-list {
     display: flex;
-   
 }
 
 .order__payment-wrap-list>span {
     font-size: 2rem;
+    padding-top: 10px
 }
 
 .order__payment-list {
@@ -474,7 +476,10 @@
 }
 
 .order__payment-delivery-description {
-
+    background-color: #fff;
+    font-size: 1.5rem;
+    padding: 20px 20px;
+    border-bottom: 1px solid rgba(0,0,0,.05);
 }
 
 .selected {
@@ -483,24 +488,68 @@
     border-color: var(--primary-color);
 }
 
+.selected::before {
+    content: "";
+    display: inline-block;
+    position:absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 3px;
+    height: 6px;
+    border-bottom: 1.5px solid #fff;
+    border-right: 1.4px solid #fff;
+    z-index: 1;
+    transform: rotate(45deg);
+}
+
 .selected::after {
     content: "";
     display: block;
     position:absolute;
-    right: 0;
-    bottom: 0;
-   
-    right: -10px;
-    bottom: -10px;
-    border-top: 10px solid red;
-    border-left: 10px solid yellow;
-    border-bottom: 10px solid blue;
-    border-right: 10px solid green;
+    right: -2px;
+    bottom: -8px;
+    border-top: 12px solid transparent;
+    border-left: 12px solid var(--primary-color);
+    border-bottom: 12px solid transparent;
+    border-right: 0 solid green;
     transform: rotate(45deg);
+}
 
-
-
-   
+.order__total-checkout-btn {
+    width: 222px;;
 }
 
 /* <!-- Order info all  --> */
+
+.order__total-info {
+    display: flex;
+    background-color: #fffefb;
+    font-size: 1.5rem;
+    padding: 20px 20px;
+    border-bottom: 1px dashed rgba(0,0,0,.05);
+    justify-content: flex-end;
+}
+
+.order__total-detail-wrap {
+    display: grid;
+    grid-template-columns: 170px 130px;
+    gap: 14px 20px;
+    color:#929292;
+}
+
+.order__total-checkout {
+    display: flex;
+    justify-content:space-between;
+    background-color: #fffefb;
+    padding: 20px;
+}
+
+.order__total-policy {
+    font-size: 1.4rem;
+    color:#929292;
+}
+
+.order__total-policy-link {
+    text-decoration: none;
+    color: rgb(0, 85, 170)
+}
