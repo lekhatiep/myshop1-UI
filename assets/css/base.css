@@ -299,3 +299,52 @@ html {
 .text-primary-color {
     color: var(--primary-color);
 }
+
+/* Modal info */
+
+.modal__success-warp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 180px;
+    background-color: rgba(60,60,60,0.8);
+    text-align: center;   
+}
+
+.icon__wrap {
+    height: 50px;
+    width:50px;
+    line-height: 50px;
+    background-color: #00bfa5;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto auto 6px auto;
+}
+
+.modal__success-icon,.modal__success-text {
+   
+    color: #fff;
+}
+
+.modal__success-icon {
+    font-size: 3rem;
+    margin-top: 23%;
+}
+
+.modal__success-text {
+    font-size: 1.7rem;
+}
+
+.modal__message.open{
+    animation: fadeIn  linear 0.1s;
+    display: flex;
+}
+.modal__message.open.close{
+    /* animation: fadeIn  linear 0.1s; */
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}

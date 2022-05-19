@@ -30,11 +30,11 @@ async function start(){
 
 start();
 
-document.addEventListener("visibilitychange", function() {
-    if (document.visibilityState === 'visible') {
-        start();
-    } 
-});
+// document.addEventListener("visibilitychange", function() {
+//     if (document.visibilityState === 'visible') {
+//         start();
+//     } 
+// });
 
 //getListCart
  async function getListCart(){

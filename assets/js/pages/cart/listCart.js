@@ -6,7 +6,7 @@ var viewCartBtn = document.querySelector('.header__cart-view-cart');
 
 export default function renderListCart(){
 
-    var listCartTemp = JSON.parse(getCookie('listCart'));
+    var listCartTemp = getCookie('listCart');
     var cartListItem = document.querySelector('.header__cart-list-item');
     var noCartList = document.querySelector('.header__cart-no-car-img')
     var noCartListMsg = document.querySelector('.header__cart-list-no-cart-msg')
@@ -14,9 +14,9 @@ export default function renderListCart(){
     var cartNoticeNumber = document.querySelector('.header__cart-notice');
     var listCartUl = document.querySelector('.header__cart-list-item');
     
-
+    console.log(listCartTemp);
     
-    if(listCartTemp === null || listCartTemp.length === 0){
+    if(listCartTemp === null){
         
         console.log('no cart')
         headerCartList.style.display = 'none';
@@ -34,8 +34,10 @@ export default function renderListCart(){
         headerCartList.style.display = 'block';
         cartListItem.style.display = 'block';
 
-        cartNoticeNumber.innerText = listCartTemp.length;
-        var html = listCartTemp.map((item) =>{
+        var data = JSON.parse(listCartTemp);
+        cartNoticeNumber.innerText = data.length;
+
+        var html = data.map((item) =>{
             return `
             <li class="header__cart-item">
             <img src="${URL_SERVER_LOCAL + item.imgPath}" alt="" class="header__cart-item-img">
