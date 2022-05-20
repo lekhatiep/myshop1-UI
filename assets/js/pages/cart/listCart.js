@@ -13,6 +13,10 @@ export default function renderListCart(){
     var headerCartList = document.querySelector('.header__cart-list-heading')
     var cartNoticeNumber = document.querySelector('.header__cart-notice');
     var listCartUl = document.querySelector('.header__cart-list-item');
+    var btnCartView = document.querySelector('.header__cart-view-cart');
+
+
+   
     
     console.log(listCartTemp);
     
@@ -21,6 +25,7 @@ export default function renderListCart(){
         console.log('no cart')
         headerCartList.style.display = 'none';
         cartListItem.style.display = 'none';
+        btnCartView.style.display = 'none';
 
         noCartList.style.display = 'block';
         noCartListMsg.style.display = 'block';
@@ -33,6 +38,7 @@ export default function renderListCart(){
 
         headerCartList.style.display = 'block';
         cartListItem.style.display = 'block';
+        btnCartView.style.display = 'block';
 
         var data = JSON.parse(listCartTemp);
         cartNoticeNumber.innerText = data.length;

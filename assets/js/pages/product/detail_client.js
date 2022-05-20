@@ -26,6 +26,10 @@ var productApi = "https://localhost:5001/api/Products";
 var cartApi = "https://localhost:5001/api/Carts";
 var listCartUl = document.querySelector('.header__cart-list-item');
 var modal = document.querySelector('.modal__message');
+var modalWrap = document.querySelector('.modal__success-warp');
+
+
+var modalEL = document.querySelector(".modal");
 
 function start() {
     handleGetInfoProduct();
@@ -34,6 +38,16 @@ function start() {
 }
 
 start();
+
+modal.addEventListener("click", modalClick)
+modalWrap.addEventListener('click', function(e) {
+    e.stopPropagation();
+    return false;
+})
+function modalClick(){
+    console.log('remove modal');
+    modal.classList.remove('open')
+}
 
 
 //Hande get info product
@@ -124,14 +138,15 @@ btnAddToCart.onclick = ()=>{
             console.log(error);
         })
     
-
+    
     modal.classList.add('open');   
     setTimeout(function(){
         modal.classList.add('close');  
         
     }, 3000);
 
-    
+   
+
     setTimeout(function(){
         modal.classList.remove('close');  
         modal.classList.remove('open');   

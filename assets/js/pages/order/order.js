@@ -1,5 +1,5 @@
 import {URL_CLIENT_LOCAL, URL_SERVER_LOCAL} from '../../const.js'
-import  {setCookie,getCookie} from '../../storeCookie.js';
+import  {setCookie,getCookie, deleteCookie} from '../../storeCookie.js';
 import  {setSession,getSession} from '../../storeSession.js';
 
 
@@ -17,6 +17,9 @@ var btnSubmitOrder = $(".order__total-checkout-btn");
 
 var modal = $('.modal__message');
 var btnOrderInfoBtn = $('.modal__info-btn');
+var modalOrderSuccess = $('.modal__success');
+var btnOrderSuccess = $('.modal__info-btn-success');
+
 
 async function start(){
 
@@ -181,6 +184,7 @@ function numberWithCommas(x) {
 //Handle submit order 
 
 btnSubmitOrder.onclick = function(){
+    renderListCartUser();
     var data = {
         userId: currentUserId,
     }
@@ -197,15 +201,27 @@ btnSubmitOrder.onclick = function(){
         .then(response => {
             if(response.status === 200){
                 deleteCookie("listCart");
+                modalOrderSuccess.classList.add('open')
+
             }
         })
         .catch((error) => {
             console.log(error);
         })
+    
+
+
+   
 }
 
 // Handle onclick btn info
 
 btnOrderInfoBtn.onclick = (event) => {
-    window.location.href = URL_CLIENT_LOCAL + "/pages/cart";
+    window.location.href = URL_CLIENT_LOCAL ;
+}
+
+// Handle onclick btn info
+
+btnOrderSuccess.onclick = (event) => {
+    window.location.href = URL_CLIENT_LOCAL + "/pages/purchase";
 }

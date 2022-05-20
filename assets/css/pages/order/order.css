@@ -574,3 +574,15 @@
     justify-content: flex-end;
     margin-top: 20px;
 }
+
+.modal__success-warp {
+    background-color: #fff;
+}
+
+.modal__success-text {
+    color: #000;
+}
+
+.modal__info-btn-success {
+    margin-top: 20px;
+}

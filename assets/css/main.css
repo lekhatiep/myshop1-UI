@@ -695,8 +695,9 @@
 
 .header__cart-no-car-img{
     width: 50%;
-    background-color:red;
     display: none;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header__cart-list-no-cart-msg{
