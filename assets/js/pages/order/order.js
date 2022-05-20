@@ -4,7 +4,8 @@ import  {setSession,getSession} from '../../storeSession.js';
 
 
 //Get variables
-
+var cartApi = URL_SERVER_LOCAL + '/api/Carts';
+var orderApi = URL_SERVER_LOCAL + '/api/Orders';
 const $ = document.querySelector.bind(document);//Query
 const currentUserId = 1; //Admin
 var divCartList = $(".order__wrap-item");
@@ -14,8 +15,8 @@ var promotionTotal = $(".order__total-promotion");
 var grandTotal = $(".order__total-grand");
 var btnSubmitOrder = $(".order__total-checkout-btn");
 
-var cartApi = URL_SERVER_LOCAL + '/api/Carts';
-var orderApi = URL_SERVER_LOCAL + '/api/Orders';
+var modal = $('.modal__message');
+var btnOrderInfoBtn = $('.modal__info-btn');
 
 async function start(){
 
@@ -60,7 +61,7 @@ function renderListCartUser(){
 
     if(data === null || data.length === 0){
         console.log('no cart')
-        
+        modal.classList.add('open');
     }else{
 
         var html = '';
@@ -201,4 +202,10 @@ btnSubmitOrder.onclick = function(){
         .catch((error) => {
             console.log(error);
         })
+}
+
+// Handle onclick btn info
+
+btnOrderInfoBtn.onclick = (event) => {
+    window.location.href = URL_CLIENT_LOCAL + "/pages/cart";
 }

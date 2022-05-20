@@ -556,3 +556,21 @@
     text-decoration: none;
     color: rgb(0, 85, 170)
 }
+/* Modal info */
+.modal__info-warp {
+    width: 500px;
+    height: 170px;
+    background-color: #fff;
+    padding: 48px 32px;
+}
+
+.modal__info-text {
+    font-size:  1.4rem;
+    color: var(--text-color);
+}
+
+.modal__info-btn-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
