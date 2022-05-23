@@ -326,7 +326,7 @@ function calculateTotal(){
     listCartItemsEl.forEach((element,index) => {
         var checkboxItem = $('.check-item-'+index);
         if(checkboxItem.checked){
-            numberChecked++;
+            
             var total = $('.item-total-'+index);
             var quantity = $('.product__quantity-'+index).value;
             currentGrandTotal += parseInt(removeCommasNumber(total.innerHTML));   

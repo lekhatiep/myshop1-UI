@@ -99,8 +99,6 @@ async function handleLoginClick(){
                 setCookie("access_token", response.access_token, 30);
                 modalEL.classList.remove('open')
     
-                window.sessionStorage.accessToken = response.access_token
-    
                 if(previousURL!==null){
                     location.href = previousURL;
                 }else{
