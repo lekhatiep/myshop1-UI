@@ -1,10 +1,11 @@
 import {URL_CLIENT_LOCAL, URL_SERVER_LOCAL} from '../../const.js'
 import  {setCookie,getCookie} from '../../storeCookie.js';
 import  {setSession,getSession} from '../../storeSession.js';
-
-
+import {checkLogin, autoRedirect} from '../../checkLogged.js'
+import {renderInfoUser} from '../../Users/user.js'
+import logOut from '../../logout.js';
 //Get variables
-
+var redirectFrom = location.pathname;
 const $ = document.querySelector.bind(document);//Query
 
 var divCartList = $(".content__cart-list-wrap");
@@ -14,11 +15,25 @@ var btnCheckAll = $(".cart__purchase-input");
 var textCheckAll = $(".cart__purchase-text");
 var headerCheckAll = $(".header__list-cart-checkbox");
 var btnPurchase = $(".cart__purchase-btn");
+var btnLogout = $('.header__navbar-logout');
 
 var cartApi = URL_SERVER_LOCAL + '/api/Carts';
+
+var accessToken = '';
 async function start(){
 
-    await getListCart()
+    var infoLog = await checkLogin();
+    if(!infoLog.isLogged){
+        autoRedirect(redirectFrom);
+       
+    }else{
+        renderInfoUser(infoLog.accessToken);
+        accessToken = infoLog.accessToken;
+        await getListCart()
+    }
+    
+
+    
     var isCheckAllBottom = getSession('isCheckAllBottom');
     var isCheckAllHeader = getSession('isCheckAllHeader');
 
@@ -39,7 +54,11 @@ start();
 //getListCart
  async function getListCart(){
 
-     await fetch(cartApi + '/GetListCart')
+     await fetch(cartApi + '/GetListCart',{
+            headers: {
+                'Authorization' : `Bearer ${accessToken}`
+            },
+        })
         .then(response=>{
             return response.json();
         })
@@ -212,7 +231,8 @@ function UpdateData() {
             var options = {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${accessToken}`
                 },
                 body: JSON.stringify(listCartTemp)
             }
@@ -258,7 +278,8 @@ function UpdateItem(id, quantity,active) {
     var options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${accessToken}`
         },
         body: JSON.stringify(data)
     }
@@ -302,7 +323,6 @@ function calculateTotal(){
     var currenTotalQuanityItem = 0;
     var currentGrandTotal = 0;
 
-    var numberChecked = 0
     listCartItemsEl.forEach((element,index) => {
         var checkboxItem = $('.check-item-'+index);
         if(checkboxItem.checked){
@@ -385,3 +405,7 @@ btnPurchase.onclick = function(){
 
     window.location.href = `${URL_CLIENT_LOCAL}/pages/order`;
 }
+
+//Handle click logOut
+
+btnLogout.addEventListener('click', logOut);

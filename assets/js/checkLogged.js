@@ -50,14 +50,16 @@ function parseJwt (token) {
 
 
 //Check Logged in
-async function isLoggedIn () {
-    const token = localStorage.getItem('access_token')
-    if (token === null) return false
-    else return true;
-}
+// async function isLoggedIn () {
+//     const token = localStorage.getItem('access_token')
+//     if (token === null) return false
+//     else return true;
+// }
     
 
 function autoRedirect (redirectFrom) {
+
+    console.log(redirectFrom);
     const validLogin = infoLogged.isLogged
 
     console.log(validLogin);

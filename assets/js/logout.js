@@ -7,8 +7,10 @@ var btnLogin = query(".header__navbar-item-login");
 
 
 function logOut(){
-    localStorage.removeItem('access_token');
     deleteCookie('access_token');
+    deleteCookie('listCart');
+    deleteCookie('userId');
+
     
     window.location.href = URL_CLIENT_LOCAL;
 

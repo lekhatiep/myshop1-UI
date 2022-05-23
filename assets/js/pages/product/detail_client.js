@@ -1,40 +1,56 @@
 console.log('sss');
 
 import {URL_SERVER_LOCAL} from '../../const.js'
-import  {setCookie} from '../../storeCookie.js';
+import  {setCookie,getCookie} from '../../storeCookie.js';
 import  renderListCart from '../cart/listCart.js'
-
+import {checkLogin, autoRedirect} from '../../checkLogged.js'
+import {renderInfoUser} from '../../Users/user.js'
+import logOut from '../../logout.js'
+import { getSession } from '../../storeSession.js';
 //Variables
-const currentUserId = 1; //Admin
+
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
 const url = new URL(window.location.href);
 
 var infoProduct = {
 
 }
 
-var title = document.querySelector('.product__detail-title');
-var price = document.querySelector('.product__detail-price-current');
-var imgList = document.querySelector('.product__box-list-item-img'); 
-var imageDetail = document.querySelector('.product__box-left-img'); 
-var btnPlus = document.querySelector('.product__quantity-warp-plus');
-var btnMinus = document.querySelector('.product__quantity-warp-minus');
-var inputQuantity = document.querySelector('.product__quantity-current');
-var btnAddToCart = document.querySelector('.product__detail-add-cart');
-var cartNoticeNumber = document.querySelector('.header__cart-notice');
+var title = $('.product__detail-title');
+var price = $('.product__detail-price-current');
+var imgList = $('.product__box-list-item-img'); 
+var imageDetail = $('.product__box-left-img'); 
+var btnPlus = $('.product__quantity-warp-plus');
+var btnMinus = $('.product__quantity-warp-minus');
+var inputQuantity = $('.product__quantity-current');
+var btnAddToCart = $('.product__detail-add-cart');
+var cartNoticeNumber = $('.header__cart-notice');
 var paramId = url.searchParams.get("id");
 var productApi = "https://localhost:5001/api/Products";
 var cartApi = "https://localhost:5001/api/Carts";
-var listCartUl = document.querySelector('.header__cart-list-item');
-var modal = document.querySelector('.modal__message');
-var modalWrap = document.querySelector('.modal__success-warp');
+var listCartUl = $('.header__cart-list-item');
+var modal = $('.modal__message');
+var modalWrap = $('.modal__success-warp');
+var btnLogout = $('.header__navbar-logout');
 
 
-var modalEL = document.querySelector(".modal");
+var redirectFrom = location.pathname + '?id='+paramId;
+console.log(redirectFrom);
 
-function start() {
+async function start() {
     handleGetInfoProduct();
-    renderListCart();
+    
+    var infoLog = await checkLogin();
+    if(!infoLog.isLogged){
+        
+    }else{
+        renderInfoUser(infoLog.accessToken)
+        renderListCart();
+    }
 
+    
 }
 
 start();
@@ -108,54 +124,73 @@ inputQuantity.onblur = ()=>{
 }
 // Handle add to cart temp
 
-btnAddToCart.onclick = ()=>{
-    
-    var data = {
-        productId: infoProduct.id,
-        price: infoProduct.price,
-        quantity: inputQuantity.value,
-        userId: currentUserId,
-    }
+//btnAddToCart.onclick = await addTocart();
 
-    var options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }
+btnAddToCart.addEventListener('click', addTocart);
+//Hanlde function addtocart 
+
+async function addTocart(){
     
-    fetch(cartApi, options)
-        .then(response => 
-            response.json()
-        )
-        .then( async response =>{
-            setCookie("listCart",JSON.stringify(response),30);
-            renderListCart();
-            
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    
-    
-    modal.classList.add('open');   
-    setTimeout(function(){
-        modal.classList.add('close');  
+    var infoLog = await checkLogin();
+    if(!infoLog.isLogged){
+
+        autoRedirect(redirectFrom);
+       
+    }else{
         
-    }, 3000);
-
-   
-
-    setTimeout(function(){
-        modal.classList.remove('close');  
-        modal.classList.remove('open');   
-    }, 5000);
+        var userId = parseInt(getCookie('userId'));
+        
+        var data = {
+            productId: infoProduct.id,
+            price: infoProduct.price,
+            quantity: inputQuantity.value,
+            userId: userId,
+        }
+    
+        var options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${infoLog.accessToken}`
+            },
+            body: JSON.stringify(data)
+        }
+        
+        fetch(cartApi, options)
+            .then(response => 
+                response.json()
+            )
+            .then( async response =>{
+                setCookie("listCart",JSON.stringify(response),30);
+                renderListCart();
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        
+        
+        modal.classList.add('open');   
+        setTimeout(function(){
+            modal.classList.add('close');  
+            
+        }, 3000);
+     
+        setTimeout(function(){
+            modal.classList.remove('close');  
+            modal.classList.remove('open');   
+        }, 5000);
+    }
 }
-
 
 document.addEventListener("visibilitychange", function() {
     if (document.visibilityState === 'visible') {
         start();
     } 
 });
+
+
+
+//Handle click logOut
+
+btnLogout.addEventListener('click', logOut);

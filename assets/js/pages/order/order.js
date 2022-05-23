@@ -1,7 +1,9 @@
 import {URL_CLIENT_LOCAL, URL_SERVER_LOCAL} from '../../const.js'
 import  {setCookie,getCookie, deleteCookie} from '../../storeCookie.js';
 import  {setSession,getSession} from '../../storeSession.js';
-
+import {checkLogin, autoRedirect} from '../../checkLogged.js'
+import {renderInfoUser} from '../../Users/user.js'
+import logOut from '../../logout.js';
 
 //Get variables
 var cartApi = URL_SERVER_LOCAL + '/api/Carts';
@@ -19,11 +21,19 @@ var modal = $('.modal__message');
 var btnOrderInfoBtn = $('.modal__info-btn');
 var modalOrderSuccess = $('.modal__success');
 var btnOrderSuccess = $('.modal__info-btn-success');
+var btnLogout = $('.header__navbar-logout');
 
-
+var redirectFrom = location.pathname;
+var accessToken = '';
 async function start(){
+    var infoLog = await checkLogin();
+    if(!infoLog.isLogged){
+        autoRedirect(redirectFrom);
+    }
 
-    await getListCartItemChecked()
+    renderInfoUser(infoLog.accessToken)
+    accessToken = infoLog.accessToken;
+    await getListCartItemChecked(infoLog.accessToken)
    
 }
 
@@ -36,9 +46,13 @@ start();
 // });
 
 //getListCart
- async function getListCartItemChecked(){
+ async function getListCartItemChecked(accessToken){
 
-     await fetch(cartApi + '/GetListCartItemChecked')
+     await fetch(cartApi + '/GetListCartItemChecked', {
+        headers: {
+            'Authorization' : `Bearer ${accessToken}`
+        },
+        })
         .then(response=>{
             return response.json();
         })
@@ -186,13 +200,14 @@ function numberWithCommas(x) {
 btnSubmitOrder.onclick = function(){
     renderListCartUser();
     var data = {
-        userId: currentUserId,
+        userId: parseInt(getCookie('userId')),
     }
 
     var options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${accessToken}`
         },
         body: JSON.stringify(data)
     }
@@ -225,3 +240,7 @@ btnOrderInfoBtn.onclick = (event) => {
 btnOrderSuccess.onclick = (event) => {
     window.location.href = URL_CLIENT_LOCAL + "/pages/purchase";
 }
+
+//Handle click logOut
+
+btnLogout.addEventListener('click', logOut);

@@ -39,7 +39,7 @@ async function start(){
     handleGetDefaultPage().then(response =>{     
             totalPages = response.totalPages;
             page = response.pageNumber;
-            Pagination(infoPage.totalPages, infoPage.pageNumber)
+            Pagination(totalPages, infoPage.pageNumber)
             
         });
 }
@@ -61,8 +61,10 @@ function renderProduct(products){
     var htmls = products.map(function(product){
 
         var imagePath = '';
-        if(product.productImages[0].length !==0){
-            imagePath = product.productImages[0].imagePath;
+        if(product.productImages.length !== 0){
+            imagePath =  product.productImages[0].imagePath;
+        }else{
+            imagePath = '';
         }
         
         return `
@@ -98,7 +100,7 @@ function renderProduct(products){
 }
 
 // Handle Delete
-function handleDelete(id){
+window.handleDelete = function(id){
 
     var msg = "Bạn có muốn xóa sản phẩm này không?"
     if(!confirm(msg)){
@@ -148,7 +150,7 @@ function handleGetDefaultPage(){
 }
 
 //Pagination
-function Pagination(totalPages,page){
+window.Pagination = function (totalPages,page){
 
     fetch(productApi + `?pageNumber=${page}&pageSize=${pageSize}`)
     .then(function(response){
@@ -184,14 +186,14 @@ function renderNavigationPaging(totalPages,page){
                 liActive = '';
             }
             
-            liTag +=` <li class="pagination-item ${liActive}" onclick="Pagination(totalPages,${pageLength})">
+            liTag +=` <li class="pagination-item ${liActive}" onclick="Pagination(${totalPages},${pageLength})">
             <div  class="pagination-item__link">${pageLength}</div>
             </li>`;
         }
         
     }else{
         if(page>1){//if page values if greater than 1 then add new li which is previous button
-            liTag += `<li class="pagination-item" onclick="Pagination(totalPages,${page - 1})">
+            liTag += `<li class="pagination-item" onclick="Pagination(${totalPages},${page - 1})">
             <div class="pagination-item__link">
                 <i class="pagination-item-icon fa-solid fa-angle-left"></i>
             </div>
@@ -199,7 +201,7 @@ function renderNavigationPaging(totalPages,page){
         }
     
         if(page>2){//if page greater than 2 then add new li tag with 1 value
-            liTag +=` <li class="pagination-item" onclick="Pagination(totalPages,1)">
+            liTag +=` <li class="pagination-item" onclick="Pagination(${totalPages},1)">
             <div  class="pagination-item__link">1</div>
             </li>`;
             if(page > 3){//if page greater than 3 then add new li tag with (...)
@@ -237,7 +239,7 @@ function renderNavigationPaging(totalPages,page){
                 liActive = '';
             }
             
-            liTag +=` <li class="pagination-item ${liActive}" onclick="Pagination(totalPages,${pageLength})">
+            liTag +=` <li class="pagination-item ${liActive}" onclick="Pagination(${totalPages},${pageLength})">
             <div  class="pagination-item__link">${pageLength}</div>
             </li>`;
         }
@@ -249,7 +251,7 @@ function renderNavigationPaging(totalPages,page){
                 <a href="" class="pagination-item__link">...</a>
                 </li>`; 
             }
-            liTag +=` <li class="pagination-item" onclick="Pagination(totalPages,totalPages)">
+            liTag +=` <li class="pagination-item" onclick="Pagination(${totalPages},${totalPages})">
             <div  class="pagination-item__link">${totalPages}</div>
             </li>`; 
         }
@@ -257,7 +259,7 @@ function renderNavigationPaging(totalPages,page){
         
     
         if(page < totalPages){//if page values if less than totalPages then add new li which is next button
-            liTag +=` <li class="pagination-item" onclick="Pagination(totalPages, ${page + 1})">
+            liTag +=` <li class="pagination-item" onclick="Pagination(${totalPages}, ${page + 1})">
             <div class="pagination-item__link">
                 <i class="pagination-item-icon fa-solid fa-angle-right"></i>
             </div>

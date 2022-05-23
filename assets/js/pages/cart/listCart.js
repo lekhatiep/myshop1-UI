@@ -3,10 +3,17 @@ import {URL_SERVER_LOCAL, URL_CLIENT_LOCAL} from '../../const.js'
 
 var cartApi = "https://localhost:5001/api/Carts";
 var viewCartBtn = document.querySelector('.header__cart-view-cart');
-
-export default function renderListCart(){
+var accessToken = getCookie("access_token");
+export default async function renderListCart(){
 
     var listCartTemp = getCookie('listCart');
+
+    if(listCartTemp === null){
+
+       await getListCart();
+       listCartTemp = getCookie('listCart');
+    }
+    
     var cartListItem = document.querySelector('.header__cart-list-item');
     var noCartList = document.querySelector('.header__cart-no-car-img')
     var noCartListMsg = document.querySelector('.header__cart-list-no-cart-msg')
@@ -85,7 +92,8 @@ window.removeFromCart = async function(id){
     var options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${accessToken}`
         },
         body: JSON.stringify(listCartTemp)
     }
@@ -104,6 +112,26 @@ window.removeFromCart = async function(id){
             
 }
 
-viewCartBtn.onclick = ()=>{
+viewCartBtn.onclick = function(){
     window.location.href = `${URL_CLIENT_LOCAL}/pages/cart`;
+}
+
+//Get list cart
+
+async function getListCart(){
+
+    await fetch(cartApi + '/GetListCart',{
+           headers: {
+               'Authorization' : `Bearer ${accessToken}`
+           },
+       })
+       .then(response=>{
+           return response.json();
+       })
+       .then((res)=>{
+           setCookie('listCart',JSON.stringify(res),30)
+       })
+       .catch(er=>{
+           console.log(er);
+       })
 }

@@ -723,7 +723,8 @@
     font-size: 1.4rem;
     color: var(--primary-color);
     top: -4px;
-    right: -4px;
+    /* right: -4px; */
+    right: 30px;
 }
 
 .header__search-input-wrap{

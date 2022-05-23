@@ -289,3 +289,11 @@ cursor: text;
 .purchase__no-content-msg {
     font-size: 1.5rem;
 }
+
+.purchase__no-content {
+    display: none;
+} 
+
+.purchase__no-content.show {
+    display: block;
+}

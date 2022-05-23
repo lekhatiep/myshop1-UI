@@ -51,7 +51,7 @@ var btnLogin = query(".header__navbar-item-login");
 var navUser = query('.header__navbar-user');
 //Function start
 async function start() {
-    renderListCart();
+   
     //Check user login  
     var infoLog =  await checkLogin();
 
@@ -59,6 +59,7 @@ async function start() {
         navUser.classList.remove('hide');
         handleGetInfoUser(infoLog);
         console.log("Login")
+        renderListCart();
     }else{
         
         console.log("not yet");

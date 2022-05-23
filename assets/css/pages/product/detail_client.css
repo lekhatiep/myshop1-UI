@@ -367,12 +367,15 @@
     margin-right: 16px;
 }
 
+.header__cart-notice {
+    right: -4px;
+}
+
 .modal__message {
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
-    /* animation: fadeIn linear 0.1s; */
     display: none;
 }
