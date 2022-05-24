@@ -98,14 +98,16 @@ async function handleLoginClick(){
                 console.log(response);
                 setCookie("access_token", response.access_token, 30);
                 modalEL.classList.remove('open')
-    
+
+                var user = await  getUserInfo(response.access_token);
+                setCookie("userId", user.id);
+                
                 if(previousURL!==null){
                     location.href = previousURL;
                 }else{
                     location.href = "/";
                 }
-                var user = await  getUserInfo(response.access_token);
-                setCookie("userId", user.id);
+                
             })
             .catch((error) => {
                 console.log(error);

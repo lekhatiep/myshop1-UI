@@ -8,6 +8,7 @@ import {
 import {checkLogin} from './checkLogged.js';
 import logOut from './logout.js';
 import renderListCart from './pages/cart/listCart.js'
+// import searchHeader from './searchHeader.js';
 
 
 console.log("Home js");
@@ -78,6 +79,8 @@ async function start() {
     handleGetListCategory(function(response){
         renderListCategory(response.data);
     });
+
+    // searchHeader('xe dap');
 }
 
 start();

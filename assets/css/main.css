@@ -854,7 +854,7 @@
 
 .header__search-input:focus ~
 .header__search-history{
-    display: block;
+   /* display: block; */
 }
 
 .header__search-history{

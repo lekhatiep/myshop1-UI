@@ -7,7 +7,7 @@ import {
 } from '../../const.js';
 import {checkLogin} from '../../checkLogged.js';
 import logOut from '../../logout.js';
-
+import  renderListCart from '../cart/listCart.js'
 
 console.log("Category js");
 //Global
@@ -59,6 +59,7 @@ async function start(){
         navUser.classList.remove('hide');
         handleGetInfoUser(infoLog);
         console.log("Login")
+        renderListCart();
     }else{
         
         console.log("not yet");

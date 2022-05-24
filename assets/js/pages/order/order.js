@@ -58,7 +58,7 @@ start();
         })
         .then((res)=>{
             if(res.status === 404){
-              
+                modal.classList.add('open');
             }else{
                 setCookie('listCart',JSON.stringify(res),30)
                 renderListCartUser();

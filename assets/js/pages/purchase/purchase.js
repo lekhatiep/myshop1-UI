@@ -81,31 +81,6 @@ function openTab(event, tabName) {
     
     //Show list 
     var status = '';
-
-    // if(tabName === 'all'){
-    //     statusOrder = status.all;
-    //     idTabActive = '#all';
-    // }
-    // else if(tabName === 'confirm'){
-    //     statusOrder = status.confirm;
-    //     idTabActive = '#confirm';
-    // }
-    // else if(tabName === 'waiting'){
-    //     statusOrder = status.waiting;
-    //     idTabActive = '#waiting';
-    // }
-    // else if(tabName === 'shipping'){
-    //     statusOrder = status.shipping;
-    //     idTabActive = '#shipping';
-    // }
-    // else if(tabName === 'delivered'){
-    //     statusOrder = status.delivered;
-    //     idTabActive = '#delivered';
-    // }
-    // else if(tabName === 'cancel'){
-    //     statusOrder = status.cancel;
-    //     idTabActive = '#cancel';
-    // }
     switch (tabName) {
         case 'all':
             status = statusOrder.all;
@@ -135,12 +110,12 @@ function openTab(event, tabName) {
             break;
     }
 
-    getListOrdered(status);
+    getListPurchaseWithStatus(status);
   }
 
 //Handle get list ordered 
 
-function getListOrdered(status){
+function getListPurchaseWithStatus(status){
 
     console.log('status: '+status);
 
@@ -160,7 +135,7 @@ function getListOrdered(status){
         })
 }
 
-//Handle renderPurchaseItem
+//Handle render purchase Item waiting
 
 function renderPurchaseItem(data) {
     if(data.length === 0){
@@ -272,3 +247,9 @@ function HandleListItem(){
 //Handle click logOut
 
 btnLogout.addEventListener('click', logOut);
+
+//Handle render purchase item: All
+
+function renderPurchaseItemAll() {
+    
+}

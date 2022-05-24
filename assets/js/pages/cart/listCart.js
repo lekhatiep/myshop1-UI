@@ -22,10 +22,6 @@ export default async function renderListCart(){
     var listCartUl = document.querySelector('.header__cart-list-item');
     var btnCartView = document.querySelector('.header__cart-view-cart');
 
-
-   
-    
-    console.log(listCartTemp);
     
     if(listCartTemp === null){
         
