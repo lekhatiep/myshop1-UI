@@ -1332,3 +1332,19 @@ i.home-product-item__like-fill{
     text-align: center;
     color: #737373;
 }
+
+/* Register modal */
+
+.modal__message-register {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: none;
+}
+
+.modal__message-register.open {
+    animation: fadeIn linear 0.1s;
+    display: flex;
+}

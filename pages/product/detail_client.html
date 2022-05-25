@@ -448,7 +448,7 @@
         <div class="modal__overlay"></div>
         <div class="modal__body">
             <!-- Register Form -->
-            <!-- <div class="auth-form">
+            <div class="auth-form register-form">
                 <div class="auth-form__container">
                     <div class="auth-form__header">
                         <h3 class="auth-form__heading">Đăng ký</h3>
@@ -457,13 +457,13 @@
 
                     <div class="auth-form__form">
                         <div class="auth-form__group">
-                            <input type="text" class="auth-form__input" placeholder="Email">
+                            <input type="text" class="auth-form__input register__input-email" placeholder="Email">
                         </div>
                         <div class="auth-form__group">
-                            <input type="password" class="auth-form__input" placeholder="Mật khẩu">
+                            <input type="password" class="auth-form__input register__input-password" placeholder="Mật khẩu">
                         </div>
                         <div class="auth-form__group">
-                            <input type="password" class="auth-form__input" placeholder="Nhập lại mật khẩu">
+                            <input type="password" class="auth-form__input register__input-cpassword" placeholder="Nhập lại mật khẩu">
                         </div>
                     </div>
 
@@ -477,7 +477,7 @@
 
                     <div class="auth-form__controls">
                         <button class="btn btn--normal auth-form__controls-back">TRỞ LẠI</button>
-                        <button class="btn btn--primary">ĐĂNG KÝ</button>
+                        <button class="btn btn--primary auth-form__controls-register">ĐĂNG KÝ</button>
 
                     </div>
                 </div>
@@ -495,9 +495,9 @@
                         </span>
                     </a>
                 </div>
-            </div> -->
+            </div>
             <!-- Login Form -->
-            <div class="auth-form">
+            <div class="auth-form login-form">
                 <div class="auth-form__container">
                     <div class="auth-form__header">
                         <h3 class="auth-form__heading">Đăng nhập</h3>
@@ -556,7 +556,8 @@
             </div>
         </div>
         
-    </div> 
+    </div>
+    <div class="register__msg-modal"></div> 
     <script type="module" src="../../assets/js/pages/product/detail_client.js"></script>
     <script type="module" src="../../assets/js/login.js"></script>
 </body>
