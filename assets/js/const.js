@@ -14,8 +14,10 @@ const query = document.querySelector.bind(document);//Query
 const queryAll = document.querySelectorAll.bind(document);
 
 //URL Dev
-const URL_SERVER_LOCAL = "https://localhost:5001";
+//const URL_SERVER_LOCAL = "https://localhost:5001";
 const URL_CLIENT_LOCAL = "http://127.0.0.1:5500";
+// URL Production
+const URL_SERVER_LOCAL = "https://api.tieplk.xyz";
 
 //Product
 const PAGE_NUMBER_DEFAULT = 1;

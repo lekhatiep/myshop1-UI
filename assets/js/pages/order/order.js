@@ -105,7 +105,7 @@ function renderListCartUser(){
                     </div>
                     <div class="order__item-info-title">
                         <span class="order__item-info-title-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                            ${item.title}
                         </span>
                     </div>
                 </div>

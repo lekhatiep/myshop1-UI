@@ -494,7 +494,10 @@
 }
 
 .header__logo-img{
-    width: 120px;
+    /* width: 120px; */
+    width: 100%;
+    margin-bottom: 10px;
+    height: 100%;
 }
 .header__logo-link {
     text-decoration: none;
