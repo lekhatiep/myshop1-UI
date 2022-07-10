@@ -87,7 +87,7 @@ function renderListCartUser(){
         var sumPromotion = 0;
         data.forEach((item,index)=>{
 
-            sumPrice+=item.price;
+            sumPrice+=(item.price*item.quantity);
 
             html+= `<div class="order__item">
             <div class="order__item-supplier">

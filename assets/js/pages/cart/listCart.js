@@ -1,7 +1,7 @@
 import {getCookie, setCookie} from '../../storeCookie.js';
 import {URL_SERVER_LOCAL, URL_CLIENT_LOCAL} from '../../const.js'
 
-var cartApi = "https://localhost:5001/api/Carts";
+var cartApi = URL_SERVER_LOCAL + "/api/Carts";
 var viewCartBtn = document.querySelector('.header__cart-view-cart');
 var accessToken = getCookie("access_token");
 export default async function renderListCart(){

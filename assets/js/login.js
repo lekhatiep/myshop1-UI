@@ -2,7 +2,7 @@ import {
     URL_CLIENT_LOCAL,
     URL_SERVER_LOCAL
 } from './const.js';
-import {setCookie} from './storeCookie.js';
+import {setCookie,deleteCookie} from './storeCookie.js';
 import  getUserInfo from './Users/user.js';
 import {setSession} from './storeSession.js';
 import {checkLogin} from '../js/checkLogged.js';
@@ -75,6 +75,8 @@ var authForm = query(".auth-form");
 var modalEL = query(".modal");
 
 loginEL.onclick = function() {
+
+    
     modalEL.classList.add('open');
     registerForm.style.display = 'none';
     loginForm.style.display = 'block';
@@ -85,7 +87,13 @@ authForm.addEventListener('click', function(e) {
     e.stopPropagation();
     return false;
 })
+
+loginForm.addEventListener('click', function(e) {
+    e.stopPropagation();
+    return false;
+})
 function modalClick(){
+    console.log('open');
     modalEL.classList.remove('open')
 }
 
@@ -120,6 +128,9 @@ async function handleLoginClick(){
             }
             )
             .then( async response =>{
+
+                deleteCookie('access_token');
+
                 console.log(response);
                 setCookie("access_token", response.access_token, 30);
                 modalEL.classList.remove('open')

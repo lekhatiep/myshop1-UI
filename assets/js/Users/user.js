@@ -1,4 +1,5 @@
 import {URL_SERVER_LOCAL} from '../const.js'
+import {getCookie,setCookie,deleteCookie} from '../storeCookie.js';
 
 export {renderInfoUser} 
 
@@ -25,6 +26,8 @@ var navUserName = query('.header__navbar-user-name');
 
 
 async function getUserInfo(accessToken){
+
+    var accessToken = getCookie('access_token');
     var response = await fetch(userApi +'/GetInfo', {
                 headers: {
                     'Authorization' : `Bearer ${accessToken}`
