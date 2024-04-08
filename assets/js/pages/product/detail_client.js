@@ -28,8 +28,8 @@ var inputQuantity = $('.product__quantity-current');
 var btnAddToCart = $('.product__detail-add-cart');
 var cartNoticeNumber = $('.header__cart-notice');
 var paramId = url.searchParams.get("id");
-var productApi = "https://localhost:5001/api/Products";
-var cartApi = "https://localhost:5001/api/Carts";
+var productApi = URL_SERVER_LOCAL +"/api/Products";
+var cartApi = URL_SERVER_LOCAL+"/api/Carts";
 var listCartUl = $('.header__cart-list-item');
 var modal = $('.modal__message');
 var modalWrap = $('.modal__success-warp');
@@ -79,7 +79,7 @@ function handleGetInfoProduct(){
         }).then((response)=>{
             title.innerText = response.title;
             price.innerText = response.price;
-            var link =  `url('${URL_SERVER_LOCAL + response.imagePath}')`;
+            var link =  `url('${response.imagePath}')`;
             imageDetail.style.backgroundImage = link;
             imgList.style.backgroundImage = link;
 
@@ -143,7 +143,7 @@ async function addTocart(){
         var data = {
             productId: infoProduct.id,
             price: infoProduct.price,
-            quantity: inputQuantity.value,
+            quantity: parseInt(inputQuantity.value),
             userId: userId,
         }
     

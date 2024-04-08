@@ -4,6 +4,7 @@ import  {setSession,getSession} from '../../storeSession.js';
 import {checkLogin, autoRedirect} from '../../checkLogged.js'
 import {renderInfoUser} from '../../Users/user.js'
 import logOut from '../../logout.js';
+import { encodeURLFirebase } from '../../commons.js';
 //Get variables
 var redirectFrom = location.pathname;
 const $ = document.querySelector.bind(document);//Query
@@ -20,6 +21,7 @@ var btnLogout = $('.header__navbar-logout');
 var cartApi = URL_SERVER_LOCAL + '/api/Carts';
 
 var accessToken = '';
+var sumCheckAll = 0;
 async function start(){
 
     var infoLog = await checkLogin();
@@ -95,11 +97,13 @@ function renderListCartUser(){
         var html = '';
 
          data.forEach((item,index)=>{
+            if(item.active) sumCheckAll++;
+
             html+= `<div class="content__cart-list-item">
             <input type="checkbox" class="content__cart-item-checkbox check-item-${index}" ${(item.active === true)? 'checked' :'' }>
             <div class="content__cart-item-info">
                 <a href="">
-                    <div class="content__cart-item-info-img" style="background-image: url(${URL_SERVER_LOCAL+ item.imgPath});"></div>
+                    <div class="content__cart-item-info-img" style="background-image: url(${encodeURLFirebase(item.imgPath)});"></div>
                 </a>
                 <div class="content__cart-wrap-title">
                     <a href="" class="content__cart-item-info-title">                  
@@ -154,7 +158,7 @@ function UpdateData() {
         var active = false;
         const id = plusItem.dataset.id;
         var quantityItem = $('.product__quantity-'+index);
-        var inputQuantity = $('.product__quantity-'+ index )
+        var inputQuantity =  $('.product__quantity-'+ index )
 
         //Handle btn (+)
         plusItem.onclick =  function(){
@@ -256,9 +260,10 @@ function UpdateData() {
             if(checkboxItem.checked){
                 active = true;
                 UpdateItem(id,parseInt(quantityItem.value),active)  
+                sumCheckAll++;
 
             }else{
-                
+                sumCheckAll--;
                 active = false;
                 UpdateItem(id,parseInt(quantityItem.value),active) 
             }
@@ -271,7 +276,7 @@ function UpdateItem(id, quantity,active) {
     
     var data = {
         id : id,
-        quantity: quantity,
+        quantity: parseInt(quantity),
         active: active
     }
 
@@ -403,8 +408,11 @@ headerCheckAll.onchange = function(){
 //Hanlde click btn purchase 
 btnPurchase.onclick = function(){
 
-    window.location.href = `${URL_CLIENT_LOCAL}/pages/order`;
+    if(sumCheckAll != 0){
+        window.location.href = `${URL_CLIENT_LOCAL}/pages/order`;
+    }
 }
+    
 
 //Handle click logOut
 

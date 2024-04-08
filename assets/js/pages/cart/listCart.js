@@ -1,5 +1,6 @@
 import {getCookie, setCookie} from '../../storeCookie.js';
 import {URL_SERVER_LOCAL, URL_CLIENT_LOCAL} from '../../const.js'
+import { encodeURLFirebase } from '../../commons.js';
 
 var cartApi = URL_SERVER_LOCAL + "/api/Carts";
 var viewCartBtn = document.querySelector('.header__cart-view-cart');
@@ -46,10 +47,16 @@ export default async function renderListCart(){
         var data = JSON.parse(listCartTemp);
         cartNoticeNumber.innerText = data.length;
 
+    
         var html = data.map((item) =>{
+            
+
+            //var originalUrl = item.imgPath;
+            
+            
             return `
             <li class="header__cart-item">
-            <img src="${URL_SERVER_LOCAL + item.imgPath}" alt="" class="header__cart-item-img">
+            <img src="${ encodeURLFirebase(item.imgPath)}" alt="" class="header__cart-item-img">
             <div class="header__cart-item-info">
                 <div class="header__cart-item-head">
                     <h5 class="header__cart-item-name">${item.title}</h5>

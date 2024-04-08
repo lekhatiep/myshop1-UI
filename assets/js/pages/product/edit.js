@@ -1,5 +1,8 @@
+import {getCookie} from '../../../js/storeCookie.js';
+import {URL_SERVER_LOCAL} from '../../const.js'
 //URL API
-var productApi = "https://localhost:5001/api/Products";
+var productApi = URL_SERVER_LOCAL +"/api/Products";
+var access_token = getCookie('access_token');
 //Element Selector
 var formEdit = document.querySelector("#admin-product__form-edit");
 var code = document.querySelector('input[name="code"]');
@@ -31,6 +34,7 @@ formEdit.onsubmit = function(e) {
 }
 
 function start() {
+    
     handleUpdate(paramId);
 
     handleSaveForm(data);
@@ -90,6 +94,9 @@ function handleSaveForm(){
 function saveProduct(formData){
     var options = {
     method: 'PUT',
+    headers: {
+        'Authorization' : `Bearer ${access_token}`
+    },
     body: formData
     };
 

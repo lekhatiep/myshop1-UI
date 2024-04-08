@@ -4,6 +4,8 @@ import  {setSession,getSession} from '../../storeSession.js';
 import {checkLogin, autoRedirect} from '../../checkLogged.js'
 import {renderInfoUser} from '../../Users/user.js'
 import logOut from '../../logout.js';
+import { encodeURLFirebase } from '../../commons.js';
+
 
 //Get variables
 var cartApi = URL_SERVER_LOCAL + '/api/Carts';
@@ -101,7 +103,7 @@ function renderListCartUser(){
             </div>
             <div class="order__item-info-wrap">
                 <div class="order__item-info">
-                    <div class="order__item-info-img" style="background-image: url('${URL_SERVER_LOCAL + item.imgPath}')">
+                    <div class="order__item-info-img" style="background-image: url('${encodeURLFirebase(item.imgPath)}')">
                     </div>
                     <div class="order__item-info-title">
                         <span class="order__item-info-title-text">

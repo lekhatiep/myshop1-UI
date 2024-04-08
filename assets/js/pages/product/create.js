@@ -1,8 +1,12 @@
 console.log("create.js");
 import {checkLogin, autoRedirect} from '../../checkLogged.js'
+import {URL_SERVER_LOCAL} from '../../const.js'
+import {getCookie} from '../../storeCookie.js';
+
 var form = document.querySelector("#admin-product__form-create");
 var redirectFrom = location.pathname;
-var productApi = "https://localhost:5001/api/Products";
+var productApi = URL_SERVER_LOCAL + "/api/Products";
+var access_token = getCookie('access_token');
 
 form.onsubmit = function(e){
     e.preventDefault();
@@ -12,7 +16,7 @@ form.onsubmit = function(e){
 async function start(){
     var infoLog = await checkLogin();
     if(!infoLog.isLogged){
-        autoRedirect(redirectFrom);
+        //autoRedirect(redirectFrom);
     }
     handleCreateForm();
 
@@ -32,14 +36,6 @@ function handleCreateForm(){
         var description = document.querySelector('textarea[name="description"]').value;
         var image = document.querySelector('input[type="file"]').files[0];
 
-        var data = {
-            code : code,
-            title: title,
-            price: price,
-            quantity: quantity,
-            description: description,
-            
-        };
         var formData = new FormData();
         formData.append("Code",code);
         formData.append("Title",title);
@@ -60,7 +56,10 @@ function handleCreateForm(){
 function createProduct(formData,callback){
     var options = {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            "Authorization": "Bearer " + access_token
+        }
     };
 
 

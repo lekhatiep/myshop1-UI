@@ -5,6 +5,7 @@ import {checkLogin, autoRedirect} from '../../checkLogged.js';
 import {renderInfoUser} from '../../Users/user.js'
 import logOut from '../../logout.js';
 import  renderListCart from '../../pages/cart/listCart.js'
+import { encodeURLFirebase } from '../../commons.js';
 //Get variables
 var orderApi = URL_SERVER_LOCAL + '/api/Orders';
 var redirectFrom = location.pathname;
@@ -22,12 +23,12 @@ var noContentTab = $('.purchase__no-content');
 var btnLogout = $('.header__navbar-logout');
 
 var statusOrder = {
-    all : 'all',
-    confirm: 'Confirm',
-    waiting: 'Processing',
-    shipping : 'Shipping',
-    delivered: 'Delivered',
-    cancel : 'Cancel',
+    all : 0,
+    waiting:  1,//'Processing',
+    confirm: 2,//'Confirm',
+    shipping : 3,//'Shipping',
+    delivered: 4,//'Delivered',
+    cancel : 5//'Cancel',
 }
 var idTabActive = '';
 var accessToken = '';
@@ -178,7 +179,7 @@ function renderPurchaseItem(data) {
     
                 <div class="purchase__item-content">
                     <div class="item__info">
-                        <div class="item__info-img" style="background-image: url('${URL_SERVER_LOCAL+ item.imgPath}') ;"></div>
+                        <div class="item__info-img" style="background-image: url('${ encodeURLFirebase(item.imgPath)}') ;"></div>
                         <div class="item__info-details">
                             <div class="item__info-title">${item.title}</div>
                             <div class="item__info-type">Phân loại:</div>

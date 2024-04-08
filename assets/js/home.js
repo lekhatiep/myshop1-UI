@@ -233,8 +233,7 @@ function renderProduct(products){
         <!-- Product item -->
         <a class="home-product-item" href="${URL_CLIENT_LOCAL}/pages/product/detail_client.html?id=${product.id}">
             <div class="home-product-item__img" 
-            style="background-image: url('${
-                URL_SERVER_LOCAL +'/'+ imgURL
+            style="background-image: url('${ imgURL
             }')">
             </div>
             <h4 class="home-product-item__name">${product.title}</h4>
