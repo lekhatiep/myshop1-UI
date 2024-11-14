@@ -32,4 +32,4 @@ This project provides a responsive, lightweight user interface built without any
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/lekhatiep/myshop1-UI.git
